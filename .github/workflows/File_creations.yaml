@@ -1,0 +1,34 @@
+name: Generate Python Script on EC2
+
+on: [push]
+
+jobs:
+  generate-file:
+    runs-on: self-hosted
+
+    strategy:
+      matrix:
+        python-version: ['3.8', '3.9']
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Run file generator script
+      run: |
+        cd src
+        # Run the generator and pass the matrix version as an argument
+        python file_generator.py ${{ matrix.python-version }}
+
+    - name: Verify file creation
+      run: |
+        cd src
+        # List the files to confirm it was created successfully
+        ls -la generated_script_${{ matrix.python-version }}.py
+        
+        # Optional: Execute the newly generated file to prove it works
+        python generated_script_${{ matrix.python-version }}.py
