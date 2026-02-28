@@ -1,2 +1,2 @@
 # Github-Actions
-Github actions projrct here
+Github actions project here
